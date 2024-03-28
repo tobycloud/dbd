@@ -1,10 +1,7 @@
 import { DiscordSDK } from "@discord/embedded-app-sdk";
 
-import rocketLogo from "/rocket.png";
-import "./style.css";
-
 // Will eventually store the authenticated user's access_token
-let auth;
+let auth: any;
 
 const discordSdk = new DiscordSDK(import.meta.env.VITE_DISCORD_CLIENT_ID);
 
@@ -45,6 +42,9 @@ async function setupDiscordSdk() {
 
 async function appendVoiceChannelName() {
   const app = document.querySelector("#app");
+  if (app == null) {
+    return;
+  }
 
   let activityChannelName = "Unknown";
 
@@ -69,6 +69,9 @@ async function appendVoiceChannelName() {
 
 async function appendGuildAvatar() {
   const app = document.querySelector("#app");
+  if (app == null) {
+    return;
+  }
 
   // 1. From the HTTP API fetch a list of all of the user's guilds
   const guilds = await fetch(`https://discord.com/api/v10/users/@me/guilds`, {
@@ -80,7 +83,7 @@ async function appendGuildAvatar() {
   }).then((response) => response.json());
 
   // 2. Find the current guild's info, including it's "icon"
-  const currentGuild = guilds.find((g) => g.id === discordSdk.guildId);
+  const currentGuild = guilds.find((g:any) => g.id === discordSdk.guildId);
 
   // 3. Append to the UI an img tag with the related information
   if (currentGuild != null) {
@@ -107,9 +110,11 @@ setupDiscordSdk().then(() => {
   appendGuildAvatar();
 });
 
-document.querySelector("#app").innerHTML = `
-  <div>
-    <img src="${rocketLogo}" class="logo" alt="Discord" />
-    <h1>Hello, World!</h1>
-  </div>
-`;
+export default function App() {
+  return (
+    <div>
+     <img src="/rocket.png" className="logo" alt="Discord" />
+      <h1>Hello, World!</h1>
+    </div>
+  );
+}
