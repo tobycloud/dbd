@@ -78,15 +78,13 @@ export default function App() {
   const discordSdk = new DiscordSDK(import.meta.env.VITE_DISCORD_CLIENT_ID);
 
   useEffect(() => {
-    if (auth === undefined) return;
-    appendGuildAvatar(discordSdk, auth).then((avatar) => setGuildAvatar(avatar));
-    appendVoiceChannelName(discordSdk).then((name) => setVoiceChannelName(name));
-  }, [auth]);
-
-  useEffect(() => {
-    setupDiscordSdk(discordSdk).then((auth) => setAuth(auth));
+    setupDiscordSdk(discordSdk).then((auth) => {
+      setAuth(auth);
+      appendVoiceChannelName(discordSdk).then((name) => setVoiceChannelName(name));
+      appendGuildAvatar(discordSdk, auth).then((avatar) => setGuildAvatar(avatar));
+    });
   }, []);
-  console.log(voiceChannelName)
+  console.log(guildAvatar, auth);
   return (
     <div>
       <img src="/rocket.png" className="logo" alt="Discord" />
